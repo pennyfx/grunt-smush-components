@@ -1,6 +1,6 @@
 {
-  "name": "x-tag-grunt",
-  "description": "Grunt task that builds all x-tag components",
+  "name": "smush-components",
+  "description": "Grunt tasks that takes all js and css from ./components and combines them. Does not use requirejs.",
   "version": "0.1.1",
   "keywords": [
     "x-tag"
