@@ -32,7 +32,10 @@ In your project's Gruntfile, add a section named `smush-components` to the data 
 grunt.initConfig({
   'smush-components': {
     options: {
-      out: './public/'  // Output location  
+      fileMap: {
+        js: './public/js',
+        css: './public/css'
+      }
     }
   },
 })
@@ -40,22 +43,19 @@ grunt.initConfig({
 
 ### Options
 
-#### options.out
-Type: `String`
-Default value: `'./dist/'`
+#### options.fileMap
+Type: `Object`
+Default value: `{}`
 
-Location to output the files
+Map a specific extension to a destination file
 
-#### options.fileName
-Type: `String`
-Default value: `'components'`
-
-CSS and Javascript file name to use
 
 ### Usage Examples
 
 
 #### Lazy Example
+
+This will output to ./components.css and ./components.js
 
 ```js
 grunt.initConfig({
@@ -66,12 +66,16 @@ grunt.initConfig({
 
 #### Custom Options
 
+Outputs files according to the fileMap
+
 ```js
 grunt.initConfig({
   'smush-components': {
     options: {
-      out: './dist/public/',
-      fileName: 'x-components'
+      fileMap: {
+        js: './public/js',
+        css: './public/css'
+      }
     }
   }
 })

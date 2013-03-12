@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('smush-components', 'Combine components js and css files.', function() {
 
-    var options = this.options({ out: './dist/', fileName: 'components' });
+    var options = this.options({ fileMap: { js: 'components.js', css: 'components.css' } });
     var done = this.async();
     var async = grunt.util.async;
 
@@ -18,17 +18,17 @@ module.exports = function(grunt) {
       var map = JSON.parse(stdout),
         files = helpers.findDependencies(map);
 
-      grunt.initConfig({
-        concat:{
-          js: {
-            src: files.js,
-            dest: path.join(options.out, options.fileName + '.js')
-          },
-          css: {
-            src: files.css,
-            dest: path.join(options.out, options.fileName + '.css')
-          }
+      var concatOptions = {};
+
+      for (var item in options.fileMap){
+        concatOptions[item] = {
+          src: files[item],
+          dest: options.fileMap[item]
         }
+      }
+
+      grunt.initConfig({
+        concat: concatOptions
       });
 
       grunt.task.run('concat');

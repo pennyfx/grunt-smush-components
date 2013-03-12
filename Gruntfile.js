@@ -17,7 +17,10 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     'smush-components': {
       options: {
-        out: './dist/'
+        fileMap:{
+          js: './dist/components.js',
+          css: './dist/components.css'
+        }
       }
     }
   });

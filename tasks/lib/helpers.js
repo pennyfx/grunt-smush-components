@@ -1,6 +1,5 @@
 module.exports.findDependencies = function(dict){
-  var depsJs = [],
-      depsCss = [];
+  var files = {js:[], css:[]};
 
   var crawlDependencies = function(dict, parentLib){
     for (var key in dict){
@@ -12,39 +11,46 @@ module.exports.findDependencies = function(dict){
         var main = Array.isArray(entry.source.main) ? entry.source.main : [entry.source.main];
         main.forEach(function(item){
 
-          if (item.match('.js$')){
+          var m = item.match(/\.(\w+)$/);
+          
+          if (m){
+            
+            var ext = m[1];
+            
+            if (!files[ext]){
+              files[ext] = [];
+            }
 
-            var existsAt = depsJs.indexOf(item),
-              parentAt = depsJs.indexOf(parentLib);
+            var existsAt = files[ext].indexOf(item),
+              parentAt = files[ext].indexOf(parentLib);
 
             if (parentAt > 0 && existsAt === -1){  //insert before
-              depsJs.splice(parentAt,0, item);
+              files[ext].splice(parentAt,0, item);
             }
             else if (parentAt > 0 && existsAt > parentAt){  // shuffle higher
-              depsJs.splice(parentAt, 0, item);
-              depsJs.splice(existsAt+1,1);
+              files[ext].splice(parentAt, 0, item);
+              files[ext].splice(existsAt+1,1);
             }
             else if (existsAt === -1){  // doesn't exist yet and no parent
-              depsJs.push(item);
-            }
+              files[ext].push(item);
+            }            
+          }
+          else {
+            Console.log("Unknown file type");
+          }
 
-          }
-          else if(item.match('.css$') && depsCss.indexOf(item) === -1){
-            depsCss.push(item);
-          }
-          
         });
 
       }
 
       if (entry.dependencies){
-        crawlDependencies(entry.dependencies, depsJs[depsJs.length-1]);
+        crawlDependencies(entry.dependencies, files['js'][files['js'].length-1]);
       }
     }
   };
 
   crawlDependencies.call(this,dict);
 
-  return { js: depsJs, css: depsCss };
+  return files;
 
 };
