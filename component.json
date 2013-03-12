@@ -1,0 +1,17 @@
+{
+  "name": "x-tag-grunt",
+  "description": "Grunt task that builds all x-tag components",
+  "version": "0.1.0",
+  "keywords": [
+    "x-tag"
+  ],
+  "main": [
+    "tasks/main.js"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "x-tag-growbox": "*",
+    "x-tag-accordion": "*",
+    "x-tag-panel": "*"
+  }
+}
