@@ -1,7 +1,7 @@
 {
   "name": "x-tag-grunt",
   "description": "Grunt task that builds all x-tag components",
-  "version": "0.2.0",
+  "version": "0.1.1",
   "keywords": [
     "x-tag"
   ],
