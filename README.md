@@ -1,6 +1,6 @@
-# grunt-x-tag
+# grunt-smush-components
 
-> Grunt tasks for managing concatinating components javascript and css.
+>Grunt task for concatinating components assets into single files.  This task relies on the 'main' key in your components.json to figure out which files are relevant.   With the fileMap option, you can then create a map between a files extension and the destination output file.  This project does not use requirejs or AMD It simply concatinates your files together.
 
 ## Getting Started
 _If you haven't used [grunt][] before, be sure to check out the [Getting Started][] guide._
