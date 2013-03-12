@@ -33,8 +33,8 @@ grunt.initConfig({
   'smush-components': {
     options: {
       fileMap: {
-        js: './public/js',
-        css: './public/css'
+        js: './public/js/components.js',
+        css: './public/css/components.css'
       }
     }
   },
@@ -45,9 +45,9 @@ grunt.initConfig({
 
 #### options.fileMap
 Type: `Object`
-Default value: `{}`
+Default value: `{ js: 'components.js', css: 'components.css' }`
 
-Map a specific extension to a destination file
+Map all files of a specific extension to a destination file
 
 
 ### Usage Examples
@@ -73,8 +73,8 @@ grunt.initConfig({
   'smush-components': {
     options: {
       fileMap: {
-        js: './public/js',
-        css: './public/css'
+        js: './public/js/components.js',
+        css: './public/css/components.js'
       }
     }
   }
