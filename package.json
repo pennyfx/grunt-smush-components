@@ -22,6 +22,6 @@
   "dependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-concat": "0.1.3",
-    "bower": "~0.8.6"
+    "bower": "git://github.com/pennyfx/bower.git#config-override"
   }
 }

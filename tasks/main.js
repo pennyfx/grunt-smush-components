@@ -34,7 +34,7 @@ module.exports = function(grunt) {
       done();
     }
 
-    bower.commands.list({map:true})
+    bower.commands.list({map:true, config: { directory: options.directory || './components', json: options.json || 'component.json' }})
     .on('data', function(data){
       getDependencyMap(data);
     })
