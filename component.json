@@ -1,12 +1,15 @@
 {
   "name": "smush-components",
   "description": "Grunt tasks that takes all js and css from ./components and combines them. Does not use requirejs.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "keywords": [
   	"components",
   	"grunt"
   ],
   "main": [
     "tasks/main.js"
-  ]
+  ],
+  "dependencies":{
+    "x-tag-panel": "*"
+  }
 }

@@ -5,7 +5,8 @@ module.exports = function(grunt) {
   var fs = require('fs'),
     path = require('path'),
     exec = require('child_process').exec,
-    helpers = require('./lib/helpers');
+    helpers = require('./lib/helpers'),
+    bower = require('bower');
 
   grunt.registerTask('smush-components', 'Combine components js and css files.', function() {
 
@@ -13,18 +14,16 @@ module.exports = function(grunt) {
     var done = this.async();
     var async = grunt.util.async;
 
-    function getDependencyMap(error, stdout, stderr) {
-      
-      var map = JSON.parse(stdout),
-        files = helpers.findDependencies(map);
+    function getDependencyMap(map) {
 
-      var concatOptions = {};
+      var files = helpers.findDependencies(map),
+        concatOptions = {};
 
       for (var item in options.fileMap){
         concatOptions[item] = {
           src: files[item],
           dest: options.fileMap[item]
-        }
+        };
       }
 
       grunt.initConfig({
@@ -35,7 +34,14 @@ module.exports = function(grunt) {
       done();
     }
 
-    exec("bower list -map", getDependencyMap);
+    bower.commands.list({map:true})
+    .on('data', function(data){
+      getDependencyMap(data);
+    })
+    .on('error', function(data){
+      console.log("bower error:", data);
+      done(data);
+    });
 
   });
 
