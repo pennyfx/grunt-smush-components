@@ -17,20 +17,19 @@ module.exports = function(grunt) {
     function getDependencyMap(map) {
 
       var files = helpers.findDependencies(map),
-        concatOptions = {};
+        concatOptions = grunt.config.getRaw('concat') || {};
 
       for (var item in options.fileMap){
-        concatOptions[item] = {
+        concatOptions['smush-'+item] = {
           src: files[item],
           dest: options.fileMap[item]
         };
       }
 
-      grunt.initConfig({
-        concat: concatOptions
-      });
-
-      grunt.task.run('concat');
+      grunt.config.set('concat', concatOptions);
+      for (var item in options.fileMap){
+        grunt.task.run('concat:smush-' + item);
+      };
       done();
     }
 
