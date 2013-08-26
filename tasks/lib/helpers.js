@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports.findDependencies = function(dict){
   var files = {js:[], css:[]};
 
@@ -6,21 +8,19 @@ module.exports.findDependencies = function(dict){
 
       var entry = dict[key];
 
-      if (entry.source && entry.source.main) {
+      if (entry.pkgMeta && entry.pkgMeta.main) {
 
-        var main = Array.isArray(entry.source.main) ? entry.source.main : [entry.source.main];
+        var main = Array.isArray(entry.pkgMeta.main) ? entry.pkgMeta.main : [entry.pkgMeta.main];
         main.forEach(function(item){
 
+          item = path.join(key, item);
           var m = item.match(/\.(\w+)$/);
 
           if (m){
-
             var ext = m[1];
-
             if (!files[ext]){
               files[ext] = [];
             }
-
             var existsAt = files[ext].indexOf(item),
               parentAt = files[ext].indexOf(parentLib);
 
@@ -36,20 +36,17 @@ module.exports.findDependencies = function(dict){
             }
           }
           else {
-            Console.log("Unknown file type");
+            console.log("Unknown file type");
           }
-
         });
-
       }
-
       if (entry.dependencies){
         crawlDependencies(entry.dependencies, files['js'][files['js'].length-1]);
       }
     }
   };
 
-  crawlDependencies.call(this,dict);
+  crawlDependencies.call(this, dict.dependencies);
 
   return files;
 

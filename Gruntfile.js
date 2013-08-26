@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    bumpup: ['component.json', 'package.json'],
+    bumpup: ['bower.json', 'package.json'],
   });
 
   grunt.loadTasks('tasks');

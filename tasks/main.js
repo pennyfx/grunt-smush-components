@@ -10,18 +10,22 @@ module.exports = function(grunt) {
 
   grunt.registerTask('smush-components', 'Combine components js and css files.', function() {
 
-    var options = this.options({ fileMap: { js: 'components.js', css: 'components.css' } });
+    var options = this.options({
+      fileMap: { js: 'components.js', css: 'components.css' },
+      directory: 'bower_components' });
+
     var done = this.async();
     var async = grunt.util.async;
 
     function getDependencyMap(map) {
-
       var files = helpers.findDependencies(map),
         concatOptions = grunt.config.getRaw('concat') || {};
 
       for (var item in options.fileMap){
         concatOptions['smush-'+item] = {
-          src: files[item],
+          src: files[item].map(function(i){
+            return path.join(options.directory, i);
+          }),
           dest: options.fileMap[item]
         };
       }
@@ -33,8 +37,8 @@ module.exports = function(grunt) {
       done();
     }
 
-    bower.commands.list({map:true, config: { directory: options.directory || './components', json: options.json || 'component.json' }})
-    .on('data', function(data){
+    bower.commands.list({directory: options.directory})
+    .on('end', function(data){
       getDependencyMap(data);
     })
     .on('error', function(data){
