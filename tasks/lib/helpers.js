@@ -10,7 +10,7 @@ module.exports.findDependencies = function(dict){
 
       if (entry.pkgMeta && entry.pkgMeta.main) {
 
-        var main = Array.isArray(entry.pkgMeta.main) ? entry.pkgMeta.main : [entry.pkgMeta.main];
+        var main = toArray(entry.pkgMeta.main);
         main.forEach(function(item){
 
           item = path.join(key, item);
@@ -21,8 +21,16 @@ module.exports.findDependencies = function(dict){
             if (!files[ext]){
               files[ext] = [];
             }
+
+            var parentFile = parentLib && parentLib.pkgMeta && parentLib.pkgMeta.main ?
+              toArray(parentLib.pkgMeta.main).filter(function(item){
+                return item.indexOf('.'+ext) > 0;
+              })[0] : null;
+
+            parentFile = parentFile != null ? path.join(parentLib.key, parentFile) : null;
+
             var existsAt = files[ext].indexOf(item),
-              parentAt = files[ext].indexOf(parentLib);
+              parentAt = files[ext].indexOf(parentFile);
 
             if (parentAt >= 0 && existsAt === -1){  //insert before
               files[ext].splice(parentAt,0, item);
@@ -41,7 +49,8 @@ module.exports.findDependencies = function(dict){
         });
       }
       if (entry.dependencies){
-        crawlDependencies(entry.dependencies, files['js'][files['js'].length-1]);
+        if (entry) entry.key = key;
+        crawlDependencies(entry.dependencies, entry);
       }
     }
   };
@@ -51,3 +60,7 @@ module.exports.findDependencies = function(dict){
   return files;
 
 };
+
+function toArray(thing){
+  return Array.isArray(thing) ? thing : [thing];
+}
