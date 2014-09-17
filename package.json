@@ -1,7 +1,7 @@
 {
   "name": "grunt-smush-components",
   "description": "Grunt tasks that takes all js and css from ./components and combines them. Does not use requirejs.",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/pennyfx/grunt-smush-components",
   "author": {
     "name": "Arron Schaar",
@@ -24,7 +24,8 @@
   },
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.2.0"
+    "grunt-contrib-jshint": "~0.2.0",
+    "grunt-bumpup": "~0.2.0"
   },
   "keywords": [
     "gruntplugin",
@@ -32,7 +33,6 @@
   ],
   "dependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-concat": "0.1.3",
-    "grunt-bumpup": "~0.2.0"
+    "grunt-contrib-concat": "0.1.3"
   }
 }
