@@ -8,9 +8,9 @@ module.exports.findDependencies = function(dict){
 
       var entry = dict[key];
 
-      if (entry.pkgMeta && entry.pkgMeta.main) {
+      if (entry && entry.main) {
 
-        var main = toArray(entry.pkgMeta.main);
+        var main = toArray(entry.main);
         main.forEach(function(item){
 
           item = path.join(key, item);
@@ -22,8 +22,8 @@ module.exports.findDependencies = function(dict){
               files[ext] = [];
             }
 
-            var parentFile = parentLib && parentLib.pkgMeta && parentLib.pkgMeta.main ?
-              toArray(parentLib.pkgMeta.main).filter(function(item){
+            var parentFile = parentLib && parentLib.main ?
+              toArray(parentLib.main).filter(function(item){
                 return item.indexOf('.'+ext) > 0;
               })[0] : null;
 

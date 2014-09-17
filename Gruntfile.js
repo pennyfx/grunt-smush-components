@@ -14,23 +14,12 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc',
       },
     },
-    // Configuration to be run (and then tested).
-    'smush-components': {
-      options: {
-        fileMap:{
-          js: './dist/components.js',
-          css: './dist/components.css'
-        }
-      }
-    },
-    bumpup: ['bower.json', 'package.json'],
+    bumpup: ['package.json'],
   });
 
   grunt.loadTasks('tasks');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bumpup');
-
   grunt.registerTask('default', ['jshint']);
-  grunt.registerTask('smush', ['smush-components']);
 
 };

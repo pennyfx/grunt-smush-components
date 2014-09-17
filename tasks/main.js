@@ -5,14 +5,35 @@ module.exports = function(grunt) {
   var fs = require('fs'),
     path = require('path'),
     exec = require('child_process').exec,
-    helpers = require('./lib/helpers'),
-    bower = require('bower');
+    helpers = require('./lib/helpers');
 
-  grunt.registerTask('smush-components', 'Combine components js and css files.', function() {
+  function buildDependencyTree(options){
+    var missingDependencies = false;
+    var bowerJson = JSON.parse(grunt.file.read(options.cwd + 'bower.json'));
+    var crawlChain = function(dependencies){
+      Object.keys(dependencies||{}).forEach(function(key){
+        var dependencyPath = path.join(options.cwd, options.bower_components, key, 'bower.json' );
+        if (fs.existsSync(dependencyPath)){
+            var dep = JSON.parse(grunt.file.read(dependencyPath));
+            dependencies[key] = dep
+            crawlChain(dep.dependencies);
+        } else {
+          missingDependencies = true;
+          grunt.log.writeln("Missing dependency:", dependencyPath);
+        }
+      });
+    }
+    crawlChain(bowerJson.dependencies);
+    if (missingDependencies) grunt.log.writeln("\nPlease run:  bower install");
+    return bowerJson;
+  }
+
+  grunt.registerMultiTask('smush-components', 'Combine components js and css files.', function() {
 
     var options = this.options({
-      fileMap: { js: 'components.js', css: 'components.css' },
-      directory: 'bower_components' });
+      cwd: process.cwd() + '/',
+      bower_components: 'bower_components'}),
+      data = this.data;
 
     var done = this.async();
     var async = grunt.util.async;
@@ -20,32 +41,23 @@ module.exports = function(grunt) {
     function getDependencyMap(map) {
       var files = helpers.findDependencies(map),
         concatOptions = grunt.config.getRaw('concat') || {};
-
-      for (var item in options.fileMap){
+      for (var item in data.fileMap){
         concatOptions['smush-'+item] = {
           src: files[item].map(function(i){
-            return path.join(options.directory, i);
+            return path.join(options.cwd, options.bower_components, i);
           }),
-          dest: options.fileMap[item]
+          dest: data.fileMap[item]
         };
       }
-
       grunt.config.set('concat', concatOptions);
-      for (var item in options.fileMap){
+      for (var item in data.fileMap){
         grunt.task.run('concat:smush-' + item);
       };
       done();
     }
 
-    bower.commands.list({directory: options.directory})
-    .on('end', function(data){
-      getDependencyMap(data);
-    })
-    .on('error', function(data){
-      console.log("bower error:", data);
-      done(data);
-    });
-
+    var tree = buildDependencyTree(options);
+    getDependencyMap(tree);
   });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
