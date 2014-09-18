@@ -74,7 +74,7 @@ grunt.initConfig({
     fileMap: {
       js: './public/js/components.js',
       css: './public/css/components.js'
-      
+
     }
   }
 })
@@ -86,5 +86,6 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][].
 
 ## Release History
-1.0.0 - Added multi-task support
+1.0.1 - Added packages key that allows package you to pick the packages you want
 
+1.0.0 - Added multi-task support

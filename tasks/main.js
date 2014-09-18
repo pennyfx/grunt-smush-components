@@ -12,6 +12,10 @@ module.exports = function(grunt) {
     var bowerJson = JSON.parse(grunt.file.read(options.cwd + 'bower.json'));
     var crawlChain = function(dependencies){
       Object.keys(dependencies||{}).forEach(function(key){
+        if (options.packages.length > 0 && options.packages.indexOf(key) == -1){
+          delete dependencies[key];
+          return;
+        }
         var dependencyPath = path.join(options.cwd, options.bower_components, key, 'bower.json' );
         if (fs.existsSync(dependencyPath)){
             var dep = JSON.parse(grunt.file.read(dependencyPath));
@@ -22,9 +26,9 @@ module.exports = function(grunt) {
           grunt.log.writeln("Missing dependency:", dependencyPath);
         }
       });
-    }
+    };
     crawlChain(bowerJson.dependencies);
-    if (missingDependencies) grunt.log.writeln("\nPlease run:  bower install");
+    if (missingDependencies) { grunt.log.writeln("\nPlease run:  bower install"); }
     return bowerJson;
   }
 
@@ -34,6 +38,8 @@ module.exports = function(grunt) {
       cwd: process.cwd() + '/',
       bower_components: 'bower_components'}),
       data = this.data;
+
+    options.packages = data.packages || [];
 
     var done = this.async();
     var async = grunt.util.async;
@@ -52,7 +58,7 @@ module.exports = function(grunt) {
       grunt.config.set('concat', concatOptions);
       for (var item in data.fileMap){
         grunt.task.run('concat:smush-' + item);
-      };
+      }
       done();
     }
 
